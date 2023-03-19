@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Assignments{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <table>
+        <tr>
+            <th>Flight</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Assignee</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+        {% for assignment in object_list %}
+        <tr>
+            <td>{{ assignment.flight.number }}</td>
+            <td>{{ assignment.flight.departure_airport.name }}</td>
+            <td>{{ assignment.flight.destination_airport.name }}</td>
+            <td>{{ assignment.employee.first_name }} {{ assignment.employee.last_name }}</td>
+            <td>{{ assignment.employee.get_role_display }}</td>
+            <td>
+                <a href="{% url 'UpdateAssignments' assignment.id %}"><i class="bi bi-pencil-square"></i></a>
+                <a href="{% url 'DeleteAssignments' assignment.id %}"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a class="add_link" href="{% url 'AddAssignments' %}">Add Assignment</a>
+</div>
+{% endblock %}

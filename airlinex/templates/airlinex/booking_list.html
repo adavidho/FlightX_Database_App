@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Bookings{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <table>
+        <tr>
+            <th>Flight</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Passenger</th>
+            <th>Passenger Notes</th>
+            <th>Actions</th>
+        </tr>
+        {% for booking in object_list %}
+        <tr>
+            <td {% if booking.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ booking.flight.number }}</td>
+            <td {% if booking.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ booking.flight.departure_airport.name }}</td>
+            <td {% if booking.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ booking.flight.destination_airport.name }}</td>
+            <td {% if booking.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ booking.passenger.first_name }} {{ booking.passenger.last_name }}</td>
+            <td {% if booking.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ booking.passenger.notes }}</td>
+            <td>
+                <a href="{% url 'UpdateBookings' booking.id %}"><i class="bi bi-pencil-square"></i></a>
+                <a href="{% url 'DeleteBookings' booking.id %}"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a class="add_link" href="{% url 'AddBookings' %}">Add Booking</a>
+</div>
+{% endblock %}

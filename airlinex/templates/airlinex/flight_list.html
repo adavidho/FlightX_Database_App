@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Flights{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <table>
+        <tr>
+            <th>Flight</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Departure</th>
+            <th>Arrival</th>
+            <th>Delay</th>
+            <th>Aircraft</th>
+            <th>Actions</th>
+        </tr>
+        {% for flight in object_list %}
+        <tr>
+            <td {% if flight.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ flight.number }}</td>
+            <td {% if flight.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ flight.departure_airport.name }}</td>
+            <td {% if flight.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ flight.destination_airport.name }}</td>
+            <td {% if flight.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ flight.departure_time }}</td>
+            <td {% if flight.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ flight.arrival_time }}</td>
+            <td {% if flight.cancelled %} style="text-decoration: line-through;"{% endif %}>{% if flight.delay > 0 %}+{% endif %}{{ flight.delay }}</td>
+            <td {% if flight.cancelled %} style="text-decoration: line-through;"{% endif %}>{{ flight.aircraft.get_type_series_display }}</td>
+            <td>
+                <a href="{% url 'UpdateFlights' flight.number %}"><i class="bi bi-pencil-square"></i></a>
+                <a href="{% url 'DeleteFlights' flight.number %}"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a class="add_link" href="{% url 'AddFlights' %}">Add Flight</a>
+</div>
+{% endblock %}

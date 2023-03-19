@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Airports{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <table>
+        <tr>
+            <th>ICAO-Code</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        {% for airport in object_list %}
+        <tr onclick="location.href = '{% url 'AirportsMView' airport.icao_code %}';" class="pointer-on-hover">
+            <a href="{% url 'AirportsMView' airport.icao_code %}"><td>{{ airport.icao_code }}</td></a>
+            <td>{{ airport.name }}</td>
+            <td>
+                <a href="{% url 'UpdateAirports' airport.icao_code %}"><i class="bi bi-pencil-square"></i></a>
+                <a href="{% url 'DeleteAirports' airport.icao_code %}"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a class="add_link" href="{% url 'AddAirports' %}">Add Airport</a>
+</div>
+{% endblock %}

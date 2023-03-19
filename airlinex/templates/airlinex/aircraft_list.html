@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Aircrafts{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <table>
+        <tr>
+            <th>Registration</th>
+            <th>Type Series</th>
+            <th>Passenger Capacity</th>
+            <th>Actions</th>
+        </tr>
+        {% for aircraft in object_list %}
+        <tr>
+            <td>{{ aircraft.registration }}</td>
+            <td>{{ aircraft.get_type_series_display }}</td>
+            <td>{{ aircraft.passenger_capacity }}</td>
+            <td>
+                <a href="{% url 'UpdateAircrafts' aircraft.registration %}"><i class="bi bi-pencil-square"></i></a>
+                <a href="{% url 'DeleteAircrafts' aircraft.registration %}"><i class="bi bi-trash"></i></a>
+                <!-- Old Edit: &#9998; Delete: &#128465; -->
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a class="add_link" href="{% url 'AddAircrafts' %}">Add Aircraft</a>
+</div>
+{% endblock %}

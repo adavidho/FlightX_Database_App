@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{% endblock %}{% if request.resolver_match.url_name == 'Home' %}Startpage{% endif %} - FMS</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <header>
+    <a href="{% url 'Home' %}" class="brand">
+      <img src="{% static 'logo.png' %}" alt="Company Logo">
+      <div class="brand-name"> Flight<div class="last-letter">X</div></div>
+    </a>
+    <nav>
+      {% if request.resolver_match.url_name == 'Home' %}
+      <ul>
+        <li><a href="{% url 'Flights' %}">Airlines</a></li>
+        <li><a href="{% url 'Airports' %}">Aviation Organizations</a></li>
+      </ul>
+      {% elif request.resolver_match.url_name in 'Aircrafts,Assignments,Bookings,Employees,Flights,Passengers' %}
+      <ul>
+        <li><a {% if request.resolver_match.url_name == 'Aircrafts' %}class="active"{% endif %} href="{% url 'Aircrafts' %}">Aircrafts</a></li>
+        <li><a {% if request.resolver_match.url_name == 'Assignments' %}class="active"{% endif %} href="{% url 'Assignments' %}">Assignments</a></li>
+        <li><a {% if request.resolver_match.url_name == 'Bookings' %}class="active"{% endif %} href="{% url 'Bookings' %}">Bookings</a></li>
+        <li><a {% if request.resolver_match.url_name == 'Employees' %}class="active"{% endif %} href="{% url 'Employees' %}">Crew</a></li>
+        <li><a {% if request.resolver_match.url_name == 'Flights' %}class="active"{% endif %} href="{% url 'Flights' %}">Flights</a></li>
+        <li><a {% if request.resolver_match.url_name == 'Passengers' %}class="active"{% endif %} href="{% url 'Passengers' %}">Passengers</a></li>
+      </ul>
+      {% elif request.resolver_match.url_name == 'Airports' %}
+      <ul>
+        <li><a {% if request.resolver_match.url_name == 'Airports' %}class="active"{% endif %} href="{% url 'Airports' %}">Airports</a></li>
+      </ul>
+      {% else %}
+      {% endif %}
+    </nav>
+  </header>
+
+  <main>
+    {% if request.resolver_match.url_name == 'Home' %}
+      <!-- Startpage content -->
+      <div class="startpage-content">
+        <h1>Welcome to FlightX!</h1>
+        <p>Do you want to manage an...</p>
+        <div class="select-content">
+          <a href="{% url 'Flights' %}" class="btn">Airline</a>
+          or
+          <a href="{% url 'Airports' %}" class="btn">Airport</a>
+        </div>
+      </div>
+    {% else %}
+      {% block content %}{% endblock %}
+    {% endif %}
+  </main>
+
+  <footer>
+    <p>Copyright &copy; 2023 Flight Management System</p>
+  </footer>
+</body>
+</html>

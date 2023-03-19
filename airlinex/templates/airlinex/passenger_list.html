@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Passengers{% endblock %}
+
+{% block content %}
+
+<div class="table-container">
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Actions</th>
+        </tr>
+        {% for passenger in object_list %}
+        <tr>
+            <td>{{ passenger.first_name }} {{ passenger.last_name }}</td>
+            <td>{{ passenger.get_status_display }}</td>
+            <td>{{ passenger.notes }}</td>
+            <td>
+                <a href="{% url 'UpdatePassengers' passenger.id %}"><i class="bi bi-pencil-square"></i></a>
+                <a href="{% url 'DeletePassengers' passenger.id %}"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a class="add_link" href="{% url 'AddPassengers' %}">Add Passenger</a>
+</div>
+{% endblock %}

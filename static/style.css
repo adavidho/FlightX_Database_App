@@ -1,0 +1,300 @@
+:root {
+    --corporate-grey: #333;
+    --corporate-yellow: rgb(255, 238, 0);
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: var(--corporate-grey);
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    align-items: center;
+    letter-spacing: 0.5px;
+}
+
+header .brand {
+    max-height: 25px;
+    display: inline-flex;
+    align-items: center;
+    margin: 2px 12px;
+    text-decoration: none;
+}
+
+header .brand img {
+    height: 35px;
+}
+
+header .brand-name {
+    color: white;
+    font-size: 22px;
+    margin-left: 6px;
+    display: inline-flex;
+}
+header .brand-name .last-letter {
+    color: var(--corporate-yellow);
+    padding: 0;
+    margin: 0;
+    margin-left: 1px;
+}
+
+header nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li {
+    margin: 0 1rem;
+}
+
+header nav ul li a {
+    color: white;
+    transition: 0.25s;
+}
+
+header nav ul li a.active {
+    color: var(--corporate-yellow);
+}
+
+header nav ul li a:hover {
+    color: var(--corporate-yellow);
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 2rem;
+    min-height: calc(100vh - 179px);
+}
+
+footer {
+    background-color: var(--corporate-grey);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+footer p {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+/* Base template startpage content */
+.startpage-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.select-content {
+    display: inline-flex;
+    align-items: center;
+}
+
+.select-content .btn {
+    background-color: var(--corporate-grey);
+    color: white;
+    padding: 20px 30px;
+    margin: 10px 20px;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    transition-timing-function: ease-in-out;
+    transition: 0.3s;
+}
+.select-content .btn:hover {
+    transform: scale(1.05);
+}
+
+/* Child template styles */
+.table-container {
+    width: 100%;
+    height: 100%;
+    max-width: 1400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 30px 0px 30px 0px;
+    padding: 0px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    overflow-x: auto;
+    scrollbar-color: grey white;
+    scrollbar-width: thin;
+    width: fit-content;
+}
+
+table {
+    border-spacing: 1;
+    border-collapse: collapse;
+    background: #fff;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 10px;
+}
+
+table th, table td {
+    padding: 10px 12px;
+}
+
+table th {
+    letter-spacing: 1px;
+}
+
+table tr {
+    transition: 0.3s;
+    line-height: 20px;
+    border-top: 1px solid rgb(95, 95, 95);
+}
+
+table tr:hover {
+    background-color: rgba(170, 170, 170, 0.5);
+}
+
+table th {
+    text-align: left;
+}
+table tr:first-child {
+    background-color: var(--corporate-grey);
+    color: white;
+    border-top-right-radius: 10px;
+}
+
+.table-container .bi {
+    color: var(--corporate-grey);
+    padding-right: 4px;
+    transition: 0.3s;
+}
+.table-container .bi:hover {
+    color: black;
+}
+
+.table-container .add_link{
+    background-color: var(--corporate-grey);
+    width: 100%;
+    padding: 10px 0px;
+    text-align: center;
+    color: white;
+    transition: 0.3s;
+}
+
+.table-container .add_link:hover {
+    color: var(--corporate-yellow);
+}
+
+
+.pointer-on-hover:hover {
+    cursor: pointer;
+}
+
+
+.airport-detail-content-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+}
+
+.airport-employees-view {
+    align-items: flex-start;
+    height: fit-content;
+}
+.airport-employees-view tr {
+    border-bottom: none;
+}
+.airport-employees-view tr:hover {
+    background-color: white;
+}
+.airport-employees-view tr:first-child:hover {
+    background-color: var(--corporate-grey);
+}
+
+.airport-info-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: 30px 0px 20px 0px;
+    padding: 0;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    overflow-x: auto;
+    scrollbar-color: grey white;
+    scrollbar-width: thin;
+    max-width: 1400px;
+    width: fit-content;
+    height: fit-content;
+}
+.airport-info-container h3 {
+    width: 100%;
+    margin: 0;
+    padding: 10px 20px;
+    color: white;
+    background-color: var(--corporate-grey);
+}
+.airport-info-container p {
+    margin: 20px;
+}
+
+/* Form pages */
+.form-container {
+    width: 100%;
+    height: 100%;
+    max-width: 1400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 30px 0px 30px 0px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    overflow-x: auto;
+    scrollbar-color: grey white;
+    scrollbar-width: thin;
+    width: fit-content;
+}
+
+.form-container form p {
+    margin-top: 0px;
+}
+.form-container form p label {
+    margin-right: 3px;
+}
+
+.form-container button[type=submit] {
+    background-color: var(--corporate-grey);
+    color: white;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.form-container button[type=submit]:hover {
+    cursor: pointer;
+    color: var(--corporate-yellow);
+}
