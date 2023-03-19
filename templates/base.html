@@ -39,9 +39,10 @@
         <li><a {% if request.resolver_match.url_name == 'Flights' %}class="active"{% endif %} href="{% url 'Flights' %}">Flights</a></li>
         <li><a {% if request.resolver_match.url_name == 'Passengers' %}class="active"{% endif %} href="{% url 'Passengers' %}">Passengers</a></li>
       </ul>
-      {% elif request.resolver_match.url_name == 'Airports' %}
+      {% elif request.resolver_match.url_name in 'Airports,Runways' %}
       <ul>
         <li><a {% if request.resolver_match.url_name == 'Airports' %}class="active"{% endif %} href="{% url 'Airports' %}">Airports</a></li>
+        <li><a {% if request.resolver_match.url_name == 'Runways' %}class="active"{% endif %} href="{% url 'Runways' %}">Runways</a></li>
       </ul>
       {% else %}
       {% endif %}

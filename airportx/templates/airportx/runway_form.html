@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Runways{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -8,7 +8,12 @@
     {% if airport_info %}
         <div class="airport-info-container">
             <h3>Airport Information</h3>
-            <p>{{ airport_info }}</p>
+            <div class="info-content">
+                <p>{{ airport_info }}</p>
+                {% if runways %}
+                    <p>Available runways: {% for runway in runways %} <b>{{ runway.name }}</b> ({{ runway.length }}m){% if not forloop.last %}, {% endif %}{% endfor %}</p>
+                {% endif %}
+            </div>
         </div>
     {% endif %}
 

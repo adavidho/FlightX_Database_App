@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Runways{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <table>
+        <tr>
+            <th>Airport</th>
+            <th>Name</th>
+            <th>Length</th>
+            <th>Actions</th>
+        </tr>
+        {% for runway in object_list %}
+        <tr>
+            <td>{{ runway.airport.name }} ({{ runway.airport.icao_code }})</td>
+            <td>{{ runway.name }}</td>
+            <td>{{ runway.length }}m</td>
+            <td>
+                <a href="{% url 'UpdateRunways' runway.pk %}"><i class="bi bi-pencil-square"></i></a>
+                <a href="{% url 'DeleteRunways' runway.pk %}"><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a class="add_link" href="{% url 'AddRunways' %}">Add Runway</a>
+</div>
+{% endblock %}
