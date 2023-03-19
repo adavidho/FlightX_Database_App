@@ -1,3 +1,33 @@
+CREATE MATERIALIZED VIEW airport_and_based_crew 
+AS SELECT airportx_airport.*, 
+COUNT(airlinex_employee.based_in_id) AS num_employees
+FROM airportx_airport
+LEFT JOIN airlinex_employee 
+ON airportx_airport.icao_code = airlinex_employee.based_in_id
+GROUP BY airportx_airport.icao_code;
+
+CREATE VIEW airport_stats AS
+SELECT a.icao_code, 
+       AVG(f.delay) AS avg_delay, 
+       COUNT(DISTINCT f.number) AS num_flights, 
+       SUM(COALESCE(bd.num_departing_passengers, 0) + COALESCE(ba.num_arriving_passengers, 0)) AS num_passengers 
+FROM airportx_airport a 
+LEFT JOIN airlinex_flight f ON a.icao_code = f.departure_airport_id OR a.icao_code = f.destination_airport_id 
+LEFT JOIN (
+    SELECT flight_id, COUNT(*) AS num_departing_passengers 
+    FROM airlinex_booking 
+    WHERE cancelled = FALSE 
+    GROUP BY flight_id
+) bd ON f.number = bd.flight_id AND f.departure_airport_id = a.icao_code 
+LEFT JOIN (
+    SELECT flight_id, COUNT(*) AS num_arriving_passengers 
+    FROM airlinex_booking 
+    WHERE cancelled = FALSE 
+    GROUP BY flight_id
+) ba ON f.number = ba.flight_id AND f.destination_airport_id = a.icao_code 
+WHERE f.cancelled = FALSE 
+GROUP BY a.icao_code, a.name;
+
 INSERT INTO  public.airlinex_aircraft (registration, type_series, passenger_capacity)
 VALUES 
 ('D-ABYA',	'B748',	364),
