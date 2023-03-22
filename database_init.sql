@@ -1,3 +1,13 @@
+DELETE FROM airlinex_assignment;
+DELETE FROM airlinex_booking;
+DELETE FROM airportx_runway;
+DELETE FROM airportx_airport;
+DELETE FROM airlinex_flight;
+DELETE FROM airlinex_passenger;
+DELETE FROM airlinex_employee;
+DELETE FROM airlinex_aircraft;
+
+-- Create views
 CREATE MATERIALIZED VIEW airport_and_based_crew 
 AS SELECT airportx_airport.*, 
 COUNT(airlinex_employee.based_in_id) AS num_employees
@@ -29,12 +39,12 @@ WHERE f.cancelled = FALSE
 GROUP BY a.icao_code, a.name;
 
 -- Stored procedure
-CREATE PROCEDURE cancel_flight(flight_number VARCHAR)
+CREATE OR REPLACE PROCEDURE cancel_flight(flight_number VARCHAR)
 LANGUAGE plpgsql
 AS $$
 BEGIN
   -- Update bookings
-  UPDATE airlinex_booking SET canceled = true WHERE flight_id = flight_number;
+  UPDATE airlinex_booking SET cancelled = true WHERE flight_id = flight_number;
   -- Remove crew assignments for the flight
   DELETE FROM airlinex_assignment WHERE flight_id = flight_number;
 END;$$;
@@ -43,7 +53,7 @@ END;$$;
 CREATE OR REPLACE FUNCTION cancel_flight_trigger_function()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF NEW.canceled THEN
+  IF NEW.cancelled THEN
     CALL cancel_flight(NEW.number);
   END IF;
   RETURN NULL;
@@ -51,7 +61,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Corresponding trigger
-CREATE TRIGGER cancel_flight_trigger
+CREATE OR REPLACE TRIGGER cancel_flight_trigger
 AFTER UPDATE ON airlinex_flight
 FOR EACH ROW
 EXECUTE FUNCTION cancel_flight_trigger_function();
@@ -118,3 +128,5 @@ VALUES
 (4, '2023-02-19 15:23:01.765973+01', 'f', 'LH470', 2),
 (5, '2023-02-19 15:23:07.689948+01', 'f', 'LH480', 2),
 (6, '2023-02-19 15:23:13.392197+01', 'f', 'LH440', 2);
+
+-- ALTER SEQUENCE airlinex_booking_id_seq START 6;

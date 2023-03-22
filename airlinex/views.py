@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 
 from .models import Aircraft, Assignment, Booking, Employee, Flight, Passenger
 from airportx.models import Airport
-from .forms import FlightForm, EmployeeForm
+from .forms import FlightFormCreate, FlightFormUpdate, EmployeeForm
 
 import pandas as pd
 
@@ -188,13 +188,13 @@ class FlightListView(ListView):
 
 class FlightsCreateView(CreateView):
     model = Flight
-    form_class = FlightForm
+    form_class = FlightFormCreate
     success_url = reverse_lazy('Flights')
 
 
 class FlightsUpdateView(UpdateView):
     model = Flight
-    form_class = FlightForm
+    form_class = FlightFormUpdate
     success_url = reverse_lazy('Flights')
 
 

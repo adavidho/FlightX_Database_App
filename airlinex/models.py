@@ -212,7 +212,7 @@ class Booking(models.Model):
     time : obj
         the time the booking was made
     cancelled : obj
-        set to true if the respective flight was cancelled (sql procedure)
+        set to true if the respective flight was canceled (sql procedure)
     """
 
     # Model Attributes 
