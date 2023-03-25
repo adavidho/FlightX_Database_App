@@ -129,8 +129,9 @@ VALUES
 (5, '2023-02-19 15:23:07.689948+01', 'f', 'LH480', 2),
 (6, '2023-02-19 15:23:13.392197+01', 'f', 'LH440', 2);
 
-ALTER SEQUENCE airlinex_booking_id_seq START 6;
-ALTER SEQUENCE airlinex_passenger_id_seq START 2;
-ALTER SEQUENCE airlinex_assignment_id_seq START 9;
-ALTER SEQUENCE airlinex_employee_id_seq START 4;
-ALTER SEQUENCE airportx_runway_id_seq START 10;
+-- Reset sequences for correct pk assignment with django after manual insert of demo data.
+SELECT setval('airportx_runway_id_seq', (SELECT MAX(id) FROM airportx_runway)+1);
+SELECT setval('airlinex_employee_id_seq', (SELECT MAX(id) FROM airlinex_employee)+1);
+SELECT setval('airlinex_assignment_id_seq', (SELECT MAX(id) FROM airlinex_assignment)+1);
+SELECT setval('airlinex_passenger_id_seq', (SELECT MAX(id) FROM airlinex_passenger)+1);
+SELECT setval('airlinex_booking_id_seq', (SELECT MAX(id) FROM airlinex_booking)+1);
