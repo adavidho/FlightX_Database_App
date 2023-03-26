@@ -210,6 +210,27 @@ table tr:first-child {
     cursor: pointer;
 }
 
+/* CSS for employee ListView badges */
+.badge {
+    display: inline-block;
+    padding: .35em .65em;
+    font-size: .75em;
+    font-weight: 700;
+    line-height: 1;
+    color: #212529;
+    background-color: var(--corporate-yellow);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+    margin-left: 4px;
+    margin-right: -4px;
+}
+.badge i.bi {
+    font-size: 11px;
+    padding-right: 0px;
+    color: #212529;
+}
 
 .airport-detail-content-container {
     display: flex;

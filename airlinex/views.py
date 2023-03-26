@@ -120,6 +120,49 @@ class BookingDeleteView(DeleteView):
 class EmployeeListView(ListView):
     model = Employee
 
+    def get_context_data(self, **kwargs):
+        "Extend the context for template rendering to incorporate additional info using advanced SQL queries."
+
+        context = super().get_context_data(**kwargs)
+
+        # In comparison with the documentation, we added the id here as required for handling with Django
+        top_hours_pilot_query = """
+        SELECT e.id, e.first_name, e.last_name, SUM(EXTRACT(epoch FROM (f.arrival_time - f.departure_time)) / 3600.0) AS total_hours
+        FROM airlinex_employee e
+        JOIN airlinex_assignment a ON a.employee_id = e.id
+        JOIN airlinex_flight f ON f.number = a.flight_id
+        WHERE e.role = 'C'
+        GROUP BY e.id
+        ORDER BY total_hours DESC
+        LIMIT 1;
+        """
+
+        try:
+            top_hours_pilot = list(Employee.objects.raw(top_hours_pilot_query))
+            context['top_hours_pilot_id'] = top_hours_pilot[0].id
+        except Exception:
+            # Django will throw an error if there are not captains, so the query does not return anything
+            pass
+
+
+        top_flights_pilot_query = """
+        SELECT e.id, (e.first_name ||' '|| e.last_name) as "Name", 
+        (SELECT COUNT(a2.id) FROM airlinex_assignment a2 WHERE a2.employee_id = e.id) as "Number of flights"
+        FROM airlinex_employee as e
+        WHERE e.role IN ('C', 'FO', 'SO')
+        ORDER BY "Number of flights" DESC
+        LIMIT 1;
+        """
+
+        try:
+            top_flights_pilot = list(Employee.objects.raw(top_flights_pilot_query))
+            context['top_flights_pilot_id'] = top_flights_pilot[0].id
+        except Exception:
+            # Django will throw an error if there are not captains, so the query does not return anything
+            pass
+
+        return context
+
 
 class EmployeeCreateView(CreateView):
     model = Employee
@@ -127,6 +170,8 @@ class EmployeeCreateView(CreateView):
     success_url = reverse_lazy('Employees')
 
     def form_valid(self, form):
+        "Extend form validation to handle employee spouse attribute on creation."
+
         response = super().form_valid(form)
 
         # If the employee has a spouse and the spouse has a different spouse, update the spouse's spouse field
@@ -150,6 +195,8 @@ class EmployeeUpdateView(UpdateView):
         return kwargs
 
     def form_valid(self, form):
+        "Extend employee form validation to handle updates of the spouse attribute."
+
         response = super().form_valid(form)
 
         # In case the spouse is updated to a new one, we want to remove the currently employee from the former spouse first.
@@ -206,6 +253,39 @@ class FlightsDeleteView(DeleteView):
 # Passenger
 class PassengerListView(ListView):
     model = Passenger
+
+    def get_context_data(self, **kwargs):
+        "Extend the context for template rendering to incorporate additional info using advanced SQL queries."
+
+        context = super().get_context_data(**kwargs)
+
+        # In comparison with the documentation, we added the id here as required for handling with Django
+        all_time_passenger_query = """
+        SELECT distinct p.id, p.first_name, p.last_name
+        FROM airlinex_booking b
+        INNER JOIN airlinex_passenger p ON b.passenger_id = p.id
+        WHERE p.status = 'P'
+        AND NOT EXISTS (
+            SELECT 1 
+            FROM airlinex_flight f 
+            WHERE NOT EXISTS (
+                SELECT 1 
+                FROM airlinex_booking b2 
+                WHERE b2.flight_id = f.number 
+                AND b2.passenger_id = p.id
+            )
+        );
+        """
+
+        try:
+            all_time_passenger = list(Passenger.objects.raw(all_time_passenger_query))
+            context['all_time_passenger_id'] = all_time_passenger[0].id
+        except Exception:
+            # Django will throw an error if there are not passengers booked on all flights, so the query does not return anything.
+            pass
+
+
+        return context
 
 
 class PassengerCreateView(CreateView):

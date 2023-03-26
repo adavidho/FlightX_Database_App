@@ -14,7 +14,9 @@
         </tr>
         {% for passenger in object_list %}
         <tr>
-            <td>{{ passenger.first_name }} {{ passenger.last_name }}</td>
+            <td>{{ passenger.first_name }} {{ passenger.last_name }}
+                {% if all_time_passenger_id and all_time_passenger_id == passenger.id %}<span class="badge"><i class="bi bi-trophy-fill"></i> ALL TIME PASSENGER</span>{% endif %}
+            </td>
             <td>{{ passenger.get_status_display }}</td>
             <td>{{ passenger.notes }}</td>
             <td>
