@@ -1,4 +1,4 @@
--- SQL Table Definitions - Not sufficient to setup the entire DB as used in the application as procedures etc. and django specific tables are excluded here.
+-- SQL Table Definitions, Procedures, Triggers and Views as specified in the ERD. Not sufficient to setup the entire DB as used in the application as django specific tables are excluded here.
 -- Use the final SQL dump (create_flightx_db.sql) for that.
 
 
@@ -87,3 +87,56 @@ CREATE TABLE airlinex_booking (
     CONSTRAINT airlinex_booking_flight_id_084d83f2_fk_airlinex_flight_number FOREIGN KEY (flight_id) REFERENCES airlinex_flight(number),
     CONSTRAINT airlinex_booking_passenger_id_da0d1fa1_fk_airlinex_passenger_id FOREIGN KEY (passenger_id) REFERENCES airlinex_passenger(id)
 );
+
+
+
+-- Stored procedure
+CREATE OR REPLACE PROCEDURE cancel_flight(flight_number VARCHAR)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  -- Update bookings
+  UPDATE airlinex_booking SET cancelled = true WHERE flight_id = flight_number;
+  -- Remove crew assignments for the flight
+  DELETE FROM airlinex_assignment WHERE flight_id = flight_number;
+END;$$;
+
+-- Trigger function to trigger and check for cancellation
+CREATE OR REPLACE FUNCTION cancel_flight_trigger_function()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.cancelled THEN
+    CALL cancel_flight(NEW.number);
+  END IF;
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Corresponding trigger
+CREATE OR REPLACE TRIGGER cancel_flight_trigger
+AFTER UPDATE ON airlinex_flight
+FOR EACH ROW
+EXECUTE FUNCTION cancel_flight_trigger_function();
+
+
+
+-- Materialized view: number of employees based at Airport
+CREATE MATERIALIZED VIEW airport_and_based_crew 
+AS SELECT airportx_airport.*, COUNT(airlinex_employee.based_in_id) AS num_employees
+FROM airportx_airport
+LEFT JOIN airlinex_employee ON airportx_airport.icao_code = airlinex_employee.based_in_id
+GROUP BY airportx_airport.icao_code;
+
+-- View: incomming flights for each airport
+CREATE OR REPLACE VIEW airport_stats AS
+SELECT 
+  airportx_airport.icao_code, 
+  AVG(airlinex_flight.delay) AS average_delay, 
+  COUNT(airlinex_flight.number) AS number_flights 
+FROM 
+  airportx_airport 
+  JOIN airlinex_flight 
+  ON airportx_airport.icao_code = airlinex_flight.departure_airport_id 
+  OR airportx_airport.icao_code = airlinex_flight.destination_airport_id
+GROUP BY 
+  airportx_airport.icao_code;
